@@ -1,25 +1,32 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+
+state={
+  data: null,
+}
+
+componentDidMount = () => {
+  fetch('http://localhost:3001/users/get')
+  .then(res => res.json())
+  // .then(data => console.log(data))
+  .then(data => this.setState({ data }))
+};
   render() {
+    const { data } = this.state;
+    if (data === null)
+      return <p>Loading ...</p>
+    console.log(data)
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {data.map((x, i) =>
+        <div key={i}>
+          <p>{x.email}</p>
+          <p>{x.password}</p>
+          <p>{x.company_name}</p>
+        </div>)}
       </div>
     );
   }
